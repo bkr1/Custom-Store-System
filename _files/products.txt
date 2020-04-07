@@ -1,0 +1,14 @@
+n=Shampoo Head and Shoulders
+b=Head and Shoulders
+ct=Shampoo
+p=12.500000
+c=01020304050607
+s=10
+u=t
+n=Sabonete Dove
+b=Dove
+ct=Sabonete
+p=2.490000
+c=10111213141516
+s=50
+u=bkr1
