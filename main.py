@@ -229,6 +229,11 @@ def searchProductsMenu():
 
     try:
         op = int(input('\nType an option: '))
+
+        if op == 1:
+            searchProductNameMenu()
+        elif op == 5:
+            productsMenu()
     except ValueError:
         print('\nATTENTION: Type a valild value!')
         os.system('pause')
@@ -287,5 +292,61 @@ def registerProduct(product):
         f.write(product.writeCode())
     
     print('\n\tProduct SUCCESSFULLY registered!')
+    os.system('pause')
+    productsMenu()
+
+def searchProductNameMenu():
+    os.system('cls')
+    print('\t########## CUSTOM STORE - SEARCH PRODUCTS ##########')
+
+    tempName = input('\n\tType the product name: ')
+    products = searchProductsName(tempName)
+
+    if products == -1:
+        print('\nATTENTION: The product was not found!')
+        os.system('pause')
+        searchProductsMenu()
+
+    #print(products)
+
+def searchProductsName(name):
+    products = []
+    otherStuff = []
+    found = False
+    count = 0
+    with open('_files\products.txt', 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            if name in line and line[0] == 'n':
+                productName = line[2:(len(line) - 1)]
+                found = True
+                count = 7
+            if found and count > 0:
+                if line[2] == '=':
+                    line = line[3:(len(line) -1)]
+                else:
+                    line = line[2:(len(line) -1)]
+
+                otherStuff.append(line)
+                count -= 1
+
+    if len(otherStuff) == 0:
+        return -1
+
+    while(len(otherStuff) > 0):
+        productName = otherStuff[0]
+        productBrand = otherStuff[1]
+        productCategory = otherStuff[2]
+        productPrice = float(otherStuff[3])
+        productCode = otherStuff[4]
+        productStock = int(otherStuff[5])
+        productUser = otherStuff[6]
+
+        product = Product(productName, productBrand, productCategory, productPrice, productCode, productStock, productUser)
+        print(product)
+        products.append(product)
+        otherStuff = otherStuff[7: len(otherStuff)]
+    
+    return products
 
 firstScreen()

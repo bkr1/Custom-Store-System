@@ -52,6 +52,8 @@ class Product:
         return 'n=%s\nb=%s\nct=%s\np=%f\nc=%s\ns=%d\nu=%s\n' %(self.name, self.brand, self.category, self.price, self.code, self.stock, self.user)
     def writeCode(self):
         return '%s\n' %(self.code)
+    def __str__(self):
+        return '\n\tName: %s\n\tBrand: %s\n\tCategory: %s\n\tPrice: %f\n\tCode: %s\n\tStock: %d\n' %(self.name, self.brand, self.category, self.price, self.code, self.stock)
 
     @property
     def name(self):

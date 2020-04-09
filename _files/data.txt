@@ -6,3 +6,7 @@ n=t
 e=t
 l=t
 p=t
+n=Thiago Silva Figueiredo
+e=thiagosfig@gmail.com
+l=thiagosfig
+p=010203040506
