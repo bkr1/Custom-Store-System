@@ -133,12 +133,12 @@ def writeUsers(user):
         f.write(user.write() + '\n')
 
 def checkLogin(login):
-    login = 'l=' + login
+    login = 'l=' + login + '\n'
     try:
         with open('_files\data.txt', 'r') as f:
             userdata = f.readlines()
             for line in userdata:
-                if login in line:
+                if login == line:
                     return True
         return False
     except FileNotFoundError:
@@ -146,14 +146,14 @@ def checkLogin(login):
         exit()
 
 def checkPassword(login, password):
-    password = 'p=' + password
+    password = 'p=' + password + '\n'
     login = 'l=' + login + '\n'
     prevLine = -1
     try:
         with open('_files\data.txt', 'r') as f:
             userdata = f.readlines()
             for line in userdata:
-                if password in line and prevLine == login:
+                if password == line and prevLine == login:
                     os.system('pause')
                     return True
                 prevLine = line
@@ -307,7 +307,11 @@ def searchProductNameMenu():
         os.system('pause')
         searchProductsMenu()
 
-    #print(products)
+    for i in range(len(products)):
+        print(products[i])
+    
+    os.system('pause')
+    searchProductsMenu()
 
 def searchProductsName(name):
     products = []
@@ -343,7 +347,6 @@ def searchProductsName(name):
         productUser = otherStuff[6]
 
         product = Product(productName, productBrand, productCategory, productPrice, productCode, productStock, productUser)
-        print(product)
         products.append(product)
         otherStuff = otherStuff[7: len(otherStuff)]
     
