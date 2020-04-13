@@ -9,8 +9,8 @@ currentUser = None
 #Hide the password with '*';
 def win_getpass(prompt='Password: ', stream=None):
     """Prompt for password with echo off, using Windows getch()."""
-    if sys.stdin is not sys.__stdin__:
-        return fallback_getpass(prompt, stream)
+    #if sys.stdin is not sys.__stdin__:
+    #    return fallback_getpass(prompt, stream)
     import msvcrt
     for c in prompt:
         msvcrt.putwch(c)
@@ -43,21 +43,16 @@ def firstScreen():
     print('\n\t\t1  Login')
     print('\n\t\t2  Register')
 
-    try:
-        option = int(input('\nType an option: '))
+    option = input('\nType an option: ')
 
-        if option == 1:
-            loginScreen()
-        elif option == 2:
-            registerScreen()
-        else:
-            print('\nATTENTION: Type a valild value!')
-            os.system('pause')
-            firstScreen()    
-    except ValueError:
+    if option == '1':
+        loginScreen()
+    elif option == '2':
+        registerScreen()
+    else:
         print('\nATTENTION: Type a valild value!')
         os.system('pause')
-        firstScreen()
+        firstScreen()    
  
 def loginScreen():
     os.system('cls')
@@ -143,6 +138,8 @@ def checkLogin(login):
         return False
     except FileNotFoundError:
         print('\n\tERROR: Data file not found!')
+        os.system('pause')
+        os.system('cls')
         exit()
 
 def checkPassword(login, password):
@@ -160,6 +157,8 @@ def checkPassword(login, password):
         return False
     except FileNotFoundError:
         print('\n\tERROR: Data file not found!')
+        os.system('pause')
+        os.system('cls')
         exit()
 
 def storeLayout():
@@ -171,27 +170,22 @@ def storeLayout():
     print('\n\t\t4  Sales')
     print('\n\t\t5  Quit')
 
-    try:
-        op = int(input('\nType an option: '))
+    op = input('\nType an option: ')
 
-        if op == 1:
+    if op == '1':
             productsMenu()
-        elif op == 2:
+    elif op == '2':
             pass
-        elif op == 3:
-            pass
-        elif op == 4:
-            pass
-        elif op == 5:
-            print('\n\tLeaving the application...')
-            os.system('pause')
-            exit()
-        else:
-            print('\nATTENTION: Type a valild value!')
-            os.system('pause')
-            storeLayout()
-
-    except ValueError:
+    elif op == '3':
+        pass
+    elif op == '4':
+        pass
+    elif op == '5':
+        print('\n\tLeaving the application...')
+        os.system('pause')
+        os.system('cls')
+        exit()
+    else:
         print('\nATTENTION: Type a valild value!')
         os.system('pause')
         storeLayout()
@@ -204,16 +198,15 @@ def productsMenu():
     print('\n\t\t3  Register')
     print('\n\t\t4  Previous Menu')
     
-    try:
-        op = int(input('\nType an option: '))
+    op = input('\nType an option: ')
 
-        if op == 1:
-            searchProductsMenu()
-        elif op == 3:
-            regiterProductsMenu()
-        elif op == 4:
-            storeLayout()
-    except ValueError:
+    if op == '1':
+        searchProductsMenu()
+    elif op == '3':
+        regiterProductsMenu()
+    elif op == '4':
+        storeLayout()
+    else:
         print('\nATTENTION: Type a valild value!')
         os.system('pause')
         productsMenu()
@@ -227,14 +220,13 @@ def searchProductsMenu():
     print('\n\t\t4  Search for Stock')
     print('\n\t\t5  Previous Menu')
 
-    try:
-        op = int(input('\nType an option: '))
+    op = input('\nType an option: ')
 
-        if op == 1:
-            searchProductNameMenu()
-        elif op == 5:
-            productsMenu()
-    except ValueError:
+    if op == '1':
+        searchProductNameMenu()
+    elif op == '5':
+        productsMenu()
+    else:
         print('\nATTENTION: Type a valild value!')
         os.system('pause')
         productsMenu()
@@ -262,6 +254,11 @@ def regiterProductsMenu():
         price = float(input('\n\tProduct Price: '))
         n = int(input('\n\tNumber of products: '))
         user = currentUser
+
+        name = name.replace(name, name.upper())
+        brand = brand.replace(brand, brand.upper())
+        category = category.replace(category, category.upper())
+
         createProduct(name, brand, code, category, price, n, user)
     except ValueError:
         print('\nATTENTION: Type a valid value!')
@@ -279,6 +276,8 @@ def checkCode(code):
         return False
     except FileNotFoundError:
         print('\n\tERROR: Data file not found!')
+        os.system('pause')
+        os.system('cls')
         exit()
 
 def createProduct(name, brand, code, category, price, n, user):
@@ -300,6 +299,9 @@ def searchProductNameMenu():
     print('\t########## CUSTOM STORE - SEARCH PRODUCTS ##########')
 
     tempName = input('\n\tType the product name: ')
+    tempName = tempName.replace(tempName, tempName.upper())
+    tempName = tempName.split(' ')
+
     products = searchProductsName(tempName)
 
     if products == -1:
@@ -313,43 +315,59 @@ def searchProductNameMenu():
     os.system('pause')
     searchProductsMenu()
 
-def searchProductsName(name):
+def searchProductsName(names):
     products = []
     otherStuff = []
     found = False
     count = 0
-    with open('_files\products.txt', 'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            if name in line and line[0] == 'n':
-                productName = line[2:(len(line) - 1)]
-                found = True
-                count = 7
-            if found and count > 0:
-                if line[2] == '=':
-                    line = line[3:(len(line) -1)]
-                else:
-                    line = line[2:(len(line) -1)]
 
-                otherStuff.append(line)
-                count -= 1
+    for i in range(len(names)):
+        check = False
+        with open('_files\products.txt', 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if names[i] in line and line[0] == 'n':
+                    productName = line[2:(len(line) - 1)]
+                    found = True
+                    count = 7
+                if found and count > 0:
+                    if line[2] == '=':
+                        line = line[3:(len(line) -1)]
+                    else:
+                        line = line[2:(len(line) -1)]
+                    otherStuff.append(line)
+                    count -= 1
 
-    if len(otherStuff) == 0:
-        return -1
+        if len(otherStuff) == 0:
+            return -1
 
-    while(len(otherStuff) > 0):
-        productName = otherStuff[0]
-        productBrand = otherStuff[1]
-        productCategory = otherStuff[2]
-        productPrice = float(otherStuff[3])
-        productCode = otherStuff[4]
-        productStock = int(otherStuff[5])
-        productUser = otherStuff[6]
+        while(len(otherStuff) > 0):
+            productName = otherStuff[0]
+            productBrand = otherStuff[1]
+            productCategory = otherStuff[2]
+            productPrice = float(otherStuff[3])
+            productCode = otherStuff[4]
+            productStock = int(otherStuff[5])
+            productUser = otherStuff[6]
 
-        product = Product(productName, productBrand, productCategory, productPrice, productCode, productStock, productUser)
-        products.append(product)
-        otherStuff = otherStuff[7: len(otherStuff)]
+            product = Product(productName, productBrand, productCategory, productPrice, productCode, productStock, productUser)
+            for p in products:
+                if product.name == p.name:
+                    check = True
+            if not check:
+                products.append(product)
+            otherStuff = otherStuff[7: len(otherStuff)]
     
+    toRemove = []
+    for i in range(len(products)):
+        for name in names:
+            if name not in products[i].name:
+                toRemove.append(products[i])
+
+    for p in toRemove:
+        if p in products:
+            products.remove(p)
+
     return products
 
 firstScreen()
