@@ -49,6 +49,8 @@ def firstScreen():
         loginScreen()
     elif option == '2':
         registerScreen()
+    elif option == 'd':
+        debugStuff()
     else:
         print('\nATTENTION: Type a valild value!')
         os.system('pause')
@@ -224,6 +226,8 @@ def searchProductsMenu():
 
     if op == '1':
         searchProductNameMenu()
+    if op == '2':
+        searchProductsCodeMenu()
     elif op == '5':
         productsMenu()
     else:
@@ -369,5 +373,77 @@ def searchProductsName(names):
             products.remove(p)
 
     return products
+
+def searchProductsCodeMenu():
+    os.system('cls')
+    print('\t########## CUSTOM STORE - SEARCH PRODUCTS ##########')
+
+    code = input('\n\tType the product code: ')
+    code = code + '\n'
+    product = searchProductsCode(code)
+    print(product)
+    
+    os.system('pause')
+    searchProductsMenu()
+
+def searchProductsCode(code):
+    exists = False
+    try:
+        with open('_files\codes.txt') as f:
+            codes = f.readlines()
+            for line in codes:
+                if code == line:
+                    exists = True        
+    except FileNotFoundError:
+        print('\n\tERROR: Data file not found!')
+        os.system('pause')
+        os.system('cls')
+        exit()
+
+    if not exists:
+        print('\nATTENTION: The product was not found!')
+        os.system('pause')
+        searchProductsMenu()
+    else:
+        code = code[0: (len(code) - 1)]
+        stop = False
+        try:
+            with open('_files\products.txt') as f:
+                lines = f.readlines()
+                index = 0
+                for line in lines:
+                    if line[0] == 'n' and not stop:
+                        mark = index
+                    if line[0] == 'c' and line[1] == '=':
+                        tempCode = line[2:(len(line) - 1)]
+                        if code == tempCode:
+                            stop = True
+                            name = lines[mark]
+                            brand = lines[mark + 1]
+                            category = lines[mark + 2]
+                            price = lines[mark + 3]
+                            code = code
+                            stock = lines[mark + 5]
+
+                            name = name[2: (len(name) - 1)]
+                            brand = brand[2: (len(brand) - 1)]
+                            category = category[3: (len(category) - 1)]
+                            price = float(price[2: (len(price) - 1)])
+                            stock = int(stock[2: (len(stock) -1)])
+
+                            product = Product(name, brand, category, price, code, stock, currentUser)
+                            return product
+                    index += 1
+                            
+        except FileNotFoundError:
+            print('\n\tERROR: Data file not found!')
+            os.system('pause')
+            os.system('cls')
+            exit()
+
+def debugStuff():
+    f = open('_files\products.txt')
+    f.seek(1043)
+    print(f.read())
 
 firstScreen()
