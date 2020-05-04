@@ -49,8 +49,6 @@ def firstScreen():
         loginScreen()
     elif option == '2':
         registerScreen()
-    elif option == 'd':
-        debugStuff()
     else:
         print('\nATTENTION: Type a valild value!')
         os.system('pause')
@@ -218,8 +216,8 @@ def searchProductsMenu():
     print('\t########## CUSTOM STORE - SEARCH PRODUCTS ##########')
     print('\n\t\t1  Search for Name')
     print('\n\t\t2  Search for Code')
-    print('\n\t\t3  Search for Branch')
-    print('\n\t\t4  Search for Stock')
+    print('\n\t\t3  Search for Brand')
+    print('\n\t\t4  Show all Products')
     print('\n\t\t5  Previous Menu')
 
     op = input('\nType an option: ')
@@ -441,9 +439,14 @@ def searchProductsCode(code):
             os.system('cls')
             exit()
 
-def debugStuff():
-    f = open('_files\products.txt')
-    f.seek(1043)
-    print(f.read())
+def searchProductBrandMenu():
+    os.system('cls')
+    print('\t########## CUSTOM STORE - SEARCH PRODUCTS ##########')
+
+    brand = input('\n\tType the product brand: ')
+    brand = brand + '\n'
+
+def searchProductBrand(brand):
+    pass
 
 firstScreen()
